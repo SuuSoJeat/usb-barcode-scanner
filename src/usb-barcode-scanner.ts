@@ -48,7 +48,11 @@ export class UsbScanner extends EventEmitter implements onDataScanned {
             this.hid.on('data', (chunk) => {
                 if (this.hidMap[chunk[2]]) {
                     if (chunk[2] !== 40) {
-                        bcodeBuffer.push(this.hidMap[chunk[2]]);
+                        if (chunk[0] == 2) {
+                            bcodeBuffer.push((this.hidMap[chunk[2]] as String).toLowerCase());
+                        } else {
+                            bcodeBuffer.push(this.hidMap[chunk[2]]);
+                        }
                     } else {
                         barcode = bcodeBuffer.join("");
                         bcodeBuffer = [];
